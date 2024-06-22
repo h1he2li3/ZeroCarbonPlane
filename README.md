@@ -1,12 +1,19 @@
-# Air0Carbon
+##### Open-source sizing and optimal control tool for full electric integrated fuel cell-battery system with the objective of mass minimisatoin. Sample data is based on A320 aircraft travelling 300 and 900 nautical mile distances.
 
-@software{yashwanth2024,
-  author       = {Yashwanth Kutti Pochareddy},
-  title        = {An open­-source tool for sizing and optimal control of fuel cells and batteries powered air­crafts},
-  month        = June,
-  year         = 2024,
-  publisher    = {Zenodo},
-  version      = {v1.0},
-  doi          = {10.5281/zenodo.YOUR_ZENODO_DOI_HERE},
-  url          = {https://github.com/YOUR_USERNAME/Air0Carbon}
+##### Please download all the files to a folder and run the model (Optimisation.ipynb) using Jupyter Notebook.
+
+##### This tool is developed as a part of Master Thesis at Technical University of Denmark (Department of Energy Conversion and Storage, and Department of Wind and Energy Systems) under the guidance of Johan Hjelm, Jinhyun Chang, Antariksh Dicholkar, and Rujie Zhu.
+
+If you use any parts of this tool in your work, please cite:
+
+```
+@article{YashwanthPochareddy2024,
+  doi = {},
+  url = {https://doi.org/10.21105/joss.02809},
+  year = {2024},
+  publisher = {Technical University of Denmark},
+  author = {Yashwanth Kutti Pochareddy},
+  title = {An open­-source tool for sizing and optimal control of fuel cells and batteries powered air­crafts},
+  journal = {Journal of Open Source Software}
 }
+```
