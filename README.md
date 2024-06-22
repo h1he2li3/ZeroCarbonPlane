@@ -9,11 +9,10 @@ If you use any parts of this tool in your work, please cite:
 ```
 @article{YashwanthPochareddy2024,
   doi = {},
-  url = {https://doi.org/10.21105/joss.02809},
+  url = {},
   year = {2024},
   publisher = {Technical University of Denmark},
   author = {Yashwanth Kutti Pochareddy},
-  title = {An open­-source tool for sizing and optimal control of fuel cells and batteries powered air­crafts},
-  journal = {Journal of Open Source Software}
+  title = {An open­-source tool for sizing and optimal control of fuel cells and batteries powered air­crafts}
 }
 ```
