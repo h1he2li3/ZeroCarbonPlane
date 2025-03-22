@@ -58,6 +58,10 @@ class TakeOffMassComp(om.ExplicitComponent):
 
         mass_tank = (mass_fuel * ((1 - grav_eff_h2)/grav_eff_h2))
 
+        # print(mass_fcsys)
+        # print(mass_batsys)
+        # print(mass_fuel)
+        # print(mass_tank)
         tot_takeoff_mass = mass_fcsys + mass_fuel + mass_tank + mass_batsys
 
         outputs['tot_takeoff_mass'] = tot_takeoff_mass

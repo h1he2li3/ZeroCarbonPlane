@@ -49,6 +49,8 @@ class FCSysPropertiesComp(om.ExplicitComponent):
         n_fcsysmodules = inputs['n_fcsysmodules']
 
         outputs['mass_fcsys'] = mass_per_fcsysmodule * n_fcsysmodules
+        # print('Mass per fuel cell system module: ', mass_per_fcsysmodule)
+        # print('Number of fuel cell system modules: ', n_fcsysmodules)
 
     def compute_partials(self, inputs, partials):
         mass_per_fcsysmodule = inputs['mass_per_fcsysmodule']

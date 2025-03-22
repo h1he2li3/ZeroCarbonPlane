@@ -69,7 +69,6 @@ class TotalPowerConstraintComp(om.ExplicitComponent):
         con_fcbatsys_1 = pwr_el_del_fcsys + pwr_el_inout_batsys - pwr_el_in_motors
 
         outputs['con_fcbatsys_1'] = con_fcbatsys_1
-
     def compute_partials(self, inputs, partials):
 
         partials['con_fcbatsys_1', 'pwr_el_del_fcsys'] = 1

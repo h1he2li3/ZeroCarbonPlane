@@ -51,7 +51,7 @@ class FCBatSysODEGroup(om.Group):
         self.add_subsystem(name='power_delivery_constraint', subsys=TotalPowerConstraintComp(num_nodes=nn),
                            promotes_inputs=['pwr_el_del_fcsys', 'pwr_el_in_motors', 'pwr_el_inout_batsys'],
                            promotes_outputs=['con_fcbatsys_1'])
-        self.add_constraint('con_fcbatsys_1', upper=0, lower=-100, scaler=1e-8)
+        self.add_constraint('con_fcbatsys_1', upper=100, lower=0, scaler=1e-8)
 
         self.add_subsystem('con_fcsys2', om.ExecComp('con_fcsys_2 = pwr_el_del_fcsys - pwr_el_max_fcsys', shape=nn,
                                                      con_fcsys_2={'units': None}, pwr_el_max_fcsys={'units': None}, pwr_el_del_fcsys={'units': None}),
@@ -62,7 +62,7 @@ class FCBatSysODEGroup(om.Group):
                            promotes_inputs=['egy_batsys', 'pwr_el_inout_batsys'], promotes_outputs=['dXdt:SoC'])
 
         self.add_subsystem('max_fcsysmodulegroup', maxFCModuleGroup(num_nodes=nn),
-                           promotes_inputs=['current_maxfcstack'], promotes_outputs=['pwr_el_del_per_maxfcsysmodule', 'pwr_aircmprsr_maxfcstack'])
+                           promotes_inputs=['current_maxfcstack'], promotes_outputs=['pwr_el_del_per_maxfcsysmodule', 'pwr_aircmprsr_maxfcstack', 'pwr_el_maxfcstack'])
 
         self.add_subsystem('fuel_cell_system_sizing', FCSysSizingComp(num_nodes=nn),
                            promotes_inputs=['pwr_el_del_per_maxfcsysmodule', 'pwr_el_max_fcsys'], promotes_outputs=['n_fcsysmodules'])
@@ -73,7 +73,7 @@ class FCBatSysODEGroup(om.Group):
         self.add_constraint('con_fcsys_3', upper=0,scaler=1e-3)
 
         self.add_subsystem('fuel_cell_system_module_properties', FCSysModulePropertiesComp(num_nodes=nn),
-                           promotes_inputs=['pwr_el_del_per_maxfcsysmodule', 'pwr_aircmprsr_maxfcstack', 'pwr_dens_fcstack'],
+                           promotes_inputs=['pwr_el_del_per_maxfcsysmodule', 'pwr_aircmprsr_maxfcstack', 'pwr_dens_fcstack', 'pwr_el_maxfcstack'],
                            promotes_outputs=['mass_per_fcsysmodule'])
 
         self.add_subsystem('fuel_cell_system_properties', FCSysPropertiesComp(num_nodes=nn),

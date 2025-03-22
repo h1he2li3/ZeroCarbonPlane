@@ -49,6 +49,7 @@ class maxFuelCellStackComp(om.ExplicitComponent):
         self.add_output('pwr_el_del_per_maxfcsysmodule', val=1.0*np.ones(nn))#, units='J/s'
         # Non-Coupling outputs
         self.add_output('eff_el_maxfcstack', val=1.0*np.ones(nn))#, units=None
+        self.add_output('pwr_el_maxfcstack', val=1.0*np.ones(nn))#, units='kW'
 
         # Partials
         ar=np.arange(nn)
@@ -58,6 +59,8 @@ class maxFuelCellStackComp(om.ExplicitComponent):
         self.declare_partials(of='pwr_el_del_per_maxfcsysmodule', wrt='pwr_el_maxfcmodule_bop', rows=ar, cols=ar)
         self.declare_partials(of='eff_el_maxfcstack', wrt='current_maxfcstack', rows=ar, cols=ar)
         self.declare_partials(of='eff_el_maxfcstack', wrt='pwr_el_maxfcmodule_bop', rows=ar, cols=ar)
+        self.declare_partials(of='pwr_el_maxfcstack', wrt='current_maxfcstack', rows=ar, cols=ar)
+        self.declare_partials(of='pwr_el_maxfcstack', wrt='pwr_el_maxfcmodule_bop', rows=ar, cols=ar)
 
     def compute(self, inputs, outputs):
         current_maxfcstack = inputs['current_maxfcstack']
@@ -67,7 +70,9 @@ class maxFuelCellStackComp(om.ExplicitComponent):
         stack_voltage_thermoneutral = num_cells_in_fcstack * 1.48
 
         stack_voltage = (-2e-7 * current_maxfcstack**3) + (0.0003 * current_maxfcstack**2) - (0.2041 * current_maxfcstack) + 274.36
-        pwr_el_maxfcstack = stack_voltage * current_maxfcstack
+
+        outputs['pwr_el_maxfcstack'] = pwr_el_maxfcstack = stack_voltage * current_maxfcstack
+
         outputs['ratio_maxpowerfcstackbycellvoltage'] = pwr_el_maxfcstack / (stack_voltage/num_cells_in_fcstack)
         # outputs['pwr_ht_maxfcstack'] = (stack_voltage_thermoneutral - stack_voltage) * current_maxfcstack
 
@@ -86,6 +91,8 @@ class maxFuelCellStackComp(om.ExplicitComponent):
         partials['pwr_el_del_per_maxfcsysmodule','pwr_el_maxfcmodule_bop'] = -1
         partials['eff_el_maxfcstack','current_maxfcstack'] = ((3 * -2e-7 * current_maxfcstack**2) + (2 * 0.0003 * current_maxfcstack**1) - (1 * 0.2041 * current_maxfcstack**0))/stack_voltage_thermoneutral
         partials['eff_el_maxfcstack','pwr_el_maxfcmodule_bop'] = 0
+        partials['pwr_el_maxfcstack','current_maxfcstack'] = (4 * -2e-7 * current_maxfcstack**3) + (3 * 0.0003 * current_maxfcstack**2) - (2 * 0.2041 * current_maxfcstack) + 274.36
+        partials['pwr_el_maxfcstack','pwr_el_maxfcmodule_bop'] = 0
 
 
 class maxFuelCellBoPComp(om.ExplicitComponent):
@@ -234,7 +241,7 @@ class maxFCModuleGroup(om.Group):
 
         maxcyclefcstackandbop.add_subsystem('d1', maxFuelCellStackComp(num_nodes=nn),
                                             promotes_inputs=['current_maxfcstack', 'pwr_el_maxfcmodule_bop'],
-                                            promotes_outputs=['ratio_maxpowerfcstackbycellvoltage', 'pwr_el_del_per_maxfcsysmodule','eff_el_maxfcstack'])
+                                            promotes_outputs=['ratio_maxpowerfcstackbycellvoltage', 'pwr_el_del_per_maxfcsysmodule','eff_el_maxfcstack', 'pwr_el_maxfcstack'])
 
         maxcyclefcstackandbop.add_subsystem('d2', maxFuelCellBoPComp(num_nodes=nn),
                                             promotes_inputs=['ratio_maxpowerfcstackbycellvoltage', 'pwr_el_del_per_maxfcsysmodule'],
