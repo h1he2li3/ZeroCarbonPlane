@@ -86,13 +86,13 @@ class FCSysModulePropertiesComp(om.ExplicitComponent):
         # print('Mass per Humidifier: ', mass_humdfr)
 
         # Mass of Cooling System
-        mass_cool = (pwr_el_del_per_maxfcsysmodule/1000)/pwr_spec_coolingmodule #[kW]/[kW/kg]
+        mass_cool = (pwr_el_maxfcstack/1000)/pwr_spec_coolingmodule #[kW]/[kW/kg] # Change this to pwr_el_maxfcstack
         # mass_cool = (pwr_el_maxfcstack/1000)/pwr_spec_coolingmodule #[kW]/[kW/kg]
         # print('Mass per Cooling System: ', mass_cool)
 
         # Total Mass
         mass_per_fcsysmodule = mass_fcstack + mass_fcstackcomponents + mass_cmprsr + mass_humdfr + mass_cool
-        # mass_per_fcsysmodule = ((pwr_el_maxfcstack/1000) / pwr_dens_fcstack) + ((n_actuators * mass_per_actuator) + (n_valves * mass_per_valve)) + ((0.0401 * (pwr_aircmprsr_maxfcstack/1000)) + 5.1724) + ((1.3669 * np.log(pwr_el_maxfcstack/1000)) + 0.2644) + ((pwr_el_del_per_maxfcsysmodule/1000)/pwr_spec_coolingmodule)
+        # mass_per_fcsysmodule = ((pwr_el_maxfcstack/1000) / pwr_dens_fcstack) + ((n_actuators * mass_per_actuator) + (n_valves * mass_per_valve)) + ((0.0401 * (pwr_aircmprsr_maxfcstack/1000)) + 5.1724) + ((1.3669 * np.log(pwr_el_maxfcstack/1000)) + 0.2644) + ((pwr_el_maxfcstack/1000)/pwr_spec_coolingmodule)
 
         outputs['mass_per_fcsysmodule'] = mass_per_fcsysmodule
 
@@ -108,7 +108,7 @@ class FCSysModulePropertiesComp(om.ExplicitComponent):
 
         pwr_spec_coolingmodule = 5.56 #[kW/kg]
 
-        partials['mass_per_fcsysmodule', 'pwr_el_del_per_maxfcsysmodule'] = 1/(1000*pwr_spec_coolingmodule)
+        partials['mass_per_fcsysmodule', 'pwr_el_del_per_maxfcsysmodule'] = 0
         partials['mass_per_fcsysmodule', 'pwr_aircmprsr_maxfcstack'] = (0.0401/1000)
         partials['mass_per_fcsysmodule', 'pwr_dens_fcstack'] = - 1 * (pwr_el_maxfcstack/1000) / (pwr_dens_fcstack ** 2)
-        partials['mass_per_fcsysmodule', 'pwr_el_maxfcstack'] = 1/(1000*pwr_dens_fcstack) + 0 + (1.3669/(pwr_el_maxfcstack/1))
+        partials['mass_per_fcsysmodule', 'pwr_el_maxfcstack'] = 1/(1000*pwr_dens_fcstack) + 0 + (1.3669/(pwr_el_maxfcstack/1)) + 1/(1000*pwr_spec_coolingmodule)
